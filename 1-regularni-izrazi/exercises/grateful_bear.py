@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-s
+
 ###############################################################################
 # Grateful Bear
 #
@@ -25,6 +28,24 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 # >>> find_words(test_text, 'de')
 # {'izdere', 'debel', 'oddide', 'začudeno'}
 ###############################################################################
+
+import re
+text = []
+
+def find_words(niz, podniz): 
+    r1 = re.findall(r"\b\w*" + podniz + r"\w*\b", niz)
+    return r1
+
+
+
+
+
+
+
+
+
+    
+
 
 
 ###############################################################################
