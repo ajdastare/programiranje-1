@@ -56,6 +56,9 @@ def find_words(niz, podniz):
 # {'zibala', 'zibel', 'zibelko'}
 ###############################################################################
 
+def find_prefix(niz,podniz):
+    besede = re.findall(r"\b" + podniz + r"\w*", niz )
+    return besede
 
 ###############################################################################
 # 3) Write a function [find_suffix] which returns the set of all words in a
@@ -64,7 +67,9 @@ def find_words(niz, podniz):
 # >>> find_suffix(test_text, 'la')
 # {'zibala', 'razveselila', 'prestrašila', 'šivala', 'opazila', 'tla'}
 ###############################################################################
-
+def find_suffix(niz,podniz):
+    beseda = re.findall(r"\w*"+ podniz + r"\b", niz )
+    return beseda
 
 ###############################################################################
 # 4) Write a function [double_letters] that returns the set of words in a
