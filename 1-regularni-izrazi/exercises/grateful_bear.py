@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-s
-
 ###############################################################################
 # Grateful Bear
 #
@@ -38,16 +35,6 @@ def find_words(niz, podniz):
 
 
 
-
-
-
-
-
-
-    
-
-
-
 ###############################################################################
 # 2) Write a function [find_prefix] which returns the set of all words in a
 #    string starting with the given prefix.
@@ -68,7 +55,7 @@ def find_prefix(niz,podniz):
 # {'zibala', 'razveselila', 'prestrašila', 'šivala', 'opazila', 'tla'}
 ###############################################################################
 def find_suffix(niz,podniz):
-    beseda = re.findall(r"\w*"+ podniz + r"\b", niz )
+    beseda = re.findall(r"\b"+r"\w+"+podniz+ r"\b", niz )
     return beseda
 
 ###############################################################################
@@ -78,3 +65,6 @@ def find_suffix(niz,podniz):
 # >>> double_letters('A volunteer is worth twenty pressed men.')
 # {'volunteer', 'pressed'}
 ###############################################################################
+def double_letters():
+    beseda =  re.findall(r"\b\w*"+ r"[\w]{2}"+ r"\w*\b","A volunteer is worth twenty pressed men.")
+    return beseda
