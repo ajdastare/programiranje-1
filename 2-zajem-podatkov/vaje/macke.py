@@ -1,6 +1,7 @@
 import requests
 import re
 import os
+import sys
 import csv
 
 ###############################################################################
@@ -8,27 +9,29 @@ import csv
 ###############################################################################
 
 # definiratje URL glavne strani bolhe za oglase z mačkami
-cats_frontpage_url = 'TODO'
+cats_frontpage_url = 'http://www.bolha.com/zivali/male-zivali/macke/'
 # mapa, v katero bomo shranili podatke
-cat_directory = 'TODO'
+cat_directory = 'cat_data'
 # ime datoteke v katero bomo shranili glavno stran
-frontpage_filename = 'TODO'
+frontpage_filename = 'frontpage.html'
 # ime CSV datoteke v katero bomo shranili podatke
-csv_filename = 'TODO'
+csv_filename = 'cat_data.csv'
+url = cats_frontpage_url
 
 
-def download_url_to_string(TODO):
+def download_url_to_string(url):
     '''This function takes a URL as argument and tries to download it
     using requests. Upon success, it returns the page contents as string.'''
     try:
         # del kode, ki morda sproži napako
-        return TODO
-    except 'TODO':
-        # koda, ki se izvede pri napaki
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+            # koda, ki se izvede pri napaki
         # dovolj je če izpišemo opozorilo in prekinemo izvajanje funkcije
-        return TODO
+        return print('stran ne obstaja!')
     # nadaljujemo s kodo če ni prišlo do napake
-    return TODO
+    return r.text
+
 
 
 def save_string_to_file(text, directory, filename):
@@ -44,11 +47,24 @@ def save_string_to_file(text, directory, filename):
 # Definirajte funkcijo, ki prenese glavno stran in jo shrani v datoteko.
 
 
-def save_frontpage(TODO):
+def save_frontpageurl(url, ime_datoteke, vsili_prenost = False):
     '''Save "cats_frontpage_url" to the file
     "cat_directory"/"frontpage_filename"'''
-    return TODO
+    try:
+        # del kode, ki morda sproži napako
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+            # koda, ki se izvede pri napaki
+        # dovolj je če izpišemo opozorilo in prekinemo izvajanje funkcije
+        print('stran ne obstaja!')
+    else:
+        with open(ime_datoteke, 'w', encoding='utf-8') as datoteka:
+            datoteka.write(r.text)
+            print('shranjeno!')
+            
 
+
+        
 ###############################################################################
 # Po pridobitvi podatkov jih želimo obdelati.
 ###############################################################################

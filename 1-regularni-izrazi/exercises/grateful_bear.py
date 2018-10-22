@@ -34,7 +34,6 @@ def find_words(niz, podniz):
     return r1
 
 
-
 ###############################################################################
 # 2) Write a function [find_prefix] which returns the set of all words in a
 #    string starting with the given prefix.
@@ -66,5 +65,5 @@ def find_suffix(niz,podniz):
 # {'volunteer', 'pressed'}
 ###############################################################################
 def double_letters():
-    beseda =  re.findall(r"\b\w*"+ r"[\w]{2}"+ r"\w*\b","A volunteer is worth twenty pressed men.")
+    beseda =  re.findall(r"\b\w*"+ r"([\w])\2"+ r"\w*\b","A volunteer is worth twenty pressed men.")
     return beseda
