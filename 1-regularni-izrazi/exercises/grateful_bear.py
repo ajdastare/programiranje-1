@@ -6,15 +6,15 @@
 #
 ###############################################################################
 
-test_text = """Gori nekje v gorah, ne ve se več, ali je bilo pri Macigoju ali
-Naravniku, je šivala gospodinja v senci pod drevesom in zibala otroka. Naenkrat
-prilomasti - pa prej ni ničesar opazila - medved in ji moli taco, v kateri je
-tičal velik, debel trn. Žena se je prestrašila, a medved le milo in pohlevno
-godrnja. Zato se žena ojunači in mu izdere trn iz tace. Mrcina kosmata pa zvrne
-zibel, jo pobaše in oddide. Čez nekaj časa pa ji zopet prinese zibel, a zvhano
-napolnjeno s sladkimi hruškami . Postavil jo je na tla pred začudeno mater in
-odracal nazaj v goščavo. "Poglej no", se je razveselila mati, "kakšen hvaležen
-medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
+test_text = """Gori nekje v gorah, ne ve se vec, ali je bilo pri Macigoju ali
+Naravniku, je sivala gospodinja v senci pod drevesom in zibala otroka. Naenkrat
+prilomasti - pa prej ni nicesar opazila - medved in ji moli taco, v kateri je
+tical velik, debel trn. zena se je prestrasila, a medved le milo in pohlevno
+godrnja. Zato se zena ojunaci in mu izdere trn iz tace. Mrcina kosmata pa zvrne
+zibel, jo pobase in oddide. cez nekaj casa pa ji zopet prinese zibel, a zvhano
+napolnjeno s sladkimi hruskami . Postavil jo je na tla pred zacudeno mater in
+odracal nazaj v goscavo. "Poglej no", se je razveselila mati, "kaksen hvalezen
+medved. Zvrhano zibelko sladkih hrusk mi je prinesel za en sam izdrt trn"."""
 
 ###############################################################################
 # 1) Write a function [find_words] that returns a set of all the  words in a
@@ -23,7 +23,7 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 # Hint: Use the regex character for the boundary [\b].
 #
 # >>> find_words(test_text, 'de')
-# {'izdere', 'debel', 'oddide', 'začudeno'}
+# {'izdere', 'debel', 'oddide', 'zacudeno'}
 ###############################################################################
 
 import re
@@ -51,11 +51,16 @@ def find_prefix(niz,podniz):
 #    string ending with the given suffix.
 #
 # >>> find_suffix(test_text, 'la')
-# {'zibala', 'razveselila', 'prestrašila', 'šivala', 'opazila', 'tla'}
+# {'zibala', 'razveselila', 'prestrasila', 'sivala', 'opazila', 'tla'}
 ###############################################################################
 def find_suffix(niz,podniz):
+    m = set()
+    vzorec = r"\w+" +  podniz
+    match = re.findall(vzorec, niz)
     beseda = re.findall(r"\b"+r"\w+"+podniz+ r"\b", niz )
-    return beseda
+    for x in match: 
+        m.add(x)
+    return m
 
 ###############################################################################
 # 4) Write a function [double_letters] that returns the set of words in a
@@ -65,5 +70,8 @@ def find_suffix(niz,podniz):
 # {'volunteer', 'pressed'}
 ###############################################################################
 def double_letters():
+    m 
     beseda =  re.findall(r"\b\w*"+ r"([\w])\2"+ r"\w*\b","A volunteer is worth twenty pressed men.")
     return beseda
+
+

@@ -32,7 +32,8 @@ def download_url_to_string(url):
     # nadaljujemo s kodo če ni prišlo do napake
     return r.text
 
-
+#vrne kot string shrnajeno v text
+#save_string_to file pa shrani v text v file 
 
 def save_string_to_file(text, directory, filename):
     '''Write "text" to the file "filename" located in directory "directory",
@@ -70,9 +71,11 @@ def save_frontpageurl(url, ime_datoteke, vsili_prenost = False):
 ###############################################################################
 
 
-def read_file_to_string(directory, filename):
-    '''Return the contents of the file "directory"/"filename" as a string.'''
-    return TODO
+def read_file_to_string(directory,filename):
+    path = os.path.join(directory, filename)
+    with open(path, encoding='utf-8') as datoteka:
+        return datoteka.read()
+        
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja vsebino spletne strani,
 # in ga razdeli na dele, kjer vsak del predstavlja en oglas. To storite s
@@ -81,6 +84,10 @@ def read_file_to_string(directory, filename):
 
 
 def page_to_ads(TODO):
+    vzorec = re.compile()
+        
+
+        )
     '''Split "page" to a list of advertisement blocks.'''
     return TODO
 
