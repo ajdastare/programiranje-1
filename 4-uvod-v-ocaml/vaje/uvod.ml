@@ -8,8 +8,19 @@
  # penultimate_element [1; 2; 3; 4];;
  - : int = 3
 [*----------------------------------------------------------------------------*)
+(* let rec ultimate_element list = *)
 
-let rec penultimate_element = ()
+
+let rec penultimate_element list = 
+  match list with
+  | [] -> failwith "List too short"
+  | x :: [] -> failwith "List too short"
+  | x :: y :: [] -> x
+  | x :: y :: ys -> penultimate_element (y :: ys)
+
+  (* let rec penultimate_element = function
+  [] ->  *)
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [get k list] poišče [k]-ti element v seznamu [list]. Številčenje
@@ -20,7 +31,11 @@ let rec penultimate_element = ()
  - : int = 1
 [*----------------------------------------------------------------------------*)
 
-let rec get = ()
+let rec get k list =
+  match k, list with
+  | _, [] -> failwith "List too short"
+  | k, x :: xs when k <= 0 -> x
+  | k, x :: xs -> get (k-1) xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [double] podvoji pojavitve elementov v seznamu.
@@ -29,7 +44,11 @@ let rec get = ()
  - : int list = [1; 1; 2; 2; 3; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec double = ()
+let rec double list = 
+  match list with 
+  | [] -> failwith "List too short"
+  | x :: []  -> x :: x :: []
+  | x :: xs -> x :: x :: double xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [divide k list] seznam razdeli na dva seznama. Prvi vsebuje prvih [k]
@@ -42,7 +61,16 @@ let rec double = ()
  - : int list * int list = ([1; 2; 3; 4; 5], [])
 [*----------------------------------------------------------------------------*)
 
-let rec divide = ()
+let rec divide k list =
+  match k, list with 
+  | k, list when (k <= 0) -> ([],list)
+  | k, [] -> ([],[])
+  | k, x :: xs ->
+  let (left_list, right_list)= divide (k-1) xs in 
+  (x :: left_list, right_list)
+
+  (* v primeru ko k ni manjši od nič vemo da imamo prvi element x :: xs (ostali elementi ), let nam shrani levi del  v left_list, desni v right_list *)
+  
 
 (*----------------------------------------------------------------------------*]
  Funkcija [delete k list] iz seznama izbriše [k]-ti element. V primeru
@@ -52,7 +80,12 @@ let rec divide = ()
  - : int list = [0; 0; 0; 0; 0]
 [*----------------------------------------------------------------------------*)
 
-let rec delete = ()
+let rec delete k list =
+  match k, list with 
+  | k, list when (k < 0) -> failwith "k too small"
+  | 0, x :: xs -> xs
+  | k, [] -> failwith "List too small"
+  | k, x :: xs -> x :: delete (k - 1) xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [slice i k list] sestavi nov seznam, ki vsebuje elemente seznama
@@ -63,7 +96,11 @@ let rec delete = ()
  - : int list = [1; 2; 3]
 [*----------------------------------------------------------------------------*)
 
-let rec slice = ()
+let rec slice i k list =
+  match i, k, list with
+  | 0, 1 , x :: xs -> [x] 
+  | 0, k, x :: xs -> x :: slice 0 (k - 1) xs
+  | i, k, x :: xs -> slice (i - 1) k xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [insert x k list] na [k]-to mesto seznama [list] vrine element [x].
@@ -130,3 +167,9 @@ let rec max_on_components = ()
 [*----------------------------------------------------------------------------*)
 
 let rec second_largest = ()
+
+
+
+
+
+

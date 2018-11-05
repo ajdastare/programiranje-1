@@ -1,3 +1,4 @@
+
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
@@ -10,10 +11,40 @@
             "args": [
                 "-i",
                 {
-                "value": "${file}",
+    
+                    "value": "${file}",
                  "quoting": "escape"
                 }
 ]
-        }
+        },
+        {
+    
+        "label": "OCaml",
+        "type": "shell",
+        "command":
+         "ocaml",
+        "args": [
+            "-init"
+        
+          ,{
+        
+            "value": "${file}",
+        
+            "quoting": "escape"
+        
+          }
+        
+        ]
+    }
     ]
 }
+
+
+        
+        
+
+
+
+
+
+
