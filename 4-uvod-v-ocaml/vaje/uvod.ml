@@ -98,6 +98,7 @@ let rec delete k list =
 
 let rec slice i k list =
   match i, k, list with
+  | _,_, [] -> []
   | 0, 1 , x :: xs -> [x] 
   | 0, k, x :: xs -> x :: slice 0 (k - 1) xs
   | i, k, x :: xs -> slice (i - 1) k xs
@@ -130,6 +131,7 @@ let rec insert x k list =
 
 let rec rotate n list =
   match n, list with
+  | _, [] -> []
   | 0, list -> list
   | _ , x :: y -> rotate (n - 1) (y @ [x])
 
@@ -156,8 +158,24 @@ let rec remove x list =
  # is_palindrome [0; 0; 1; 0];;
  - : bool = false
 [*----------------------------------------------------------------------------*)
+(* 
+let rec is_palindrome list = 
+  dolzina = len(list)
+  if rotate dolzina lis = list -> return(True)
+  else -> return(False) *)
 
-let rec is_palindrome = ()
+  let is_palindrome list =
+   let rec aux l0 l1 =
+       match (l0, l1) with
+       | _,[] -> (true,[])
+       | hd :: tl, [x] -> (hd = x, tl)
+       | _, hd1 :: tl1 -> let (pal, ll) = aux l0 tl1 in
+             match ll with
+             | [] -> (pal, [])
+             | hd::tl -> (pal && hd1 = hd, tl) in
+   match list with
+   [] -> true
+   | _ -> fst (aux list list)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [max_on_components] sprejme dva seznama in vrne nov seznam, katerega
@@ -168,7 +186,16 @@ let rec is_palindrome = ()
  - : int list = [5; 4; 3; 3; 4]
 [*----------------------------------------------------------------------------*)
 
-let rec max_on_components = ()
+let rec max_on_components l0 l1 =
+  match l0 , l1 with
+  | x :: xs, y :: ys ->
+  if (x >= y ) then
+  x :: max_on_components xs ys
+  else 
+  y :: max_on_components xs ys
+  | [], _ -> []
+  | _, [] -> []
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [second_largest] vrne drugo največjo vrednost v seznamu. Pri tem se
@@ -179,9 +206,18 @@ let rec max_on_components = ()
  # second_largest [1; 10; 11; 11; 5; 4; 10];;
  - : int = 10
 [*----------------------------------------------------------------------------*)
+let max l = 
+  match l with
+  [] -> failwith "None"
+  |h::t ->  let rec helper (seen,rest) =
+              match rest with 
+              [] -> seen
+              |h'::t' -> let seen' = if h' > seen then h' else seen in 
+                         let rest' = t'
+              in helper (seen',rest')
+            in helper (h,t) 
 
-let rec second_largest = ()
-
+let rec second_largest seznam = max (remove (max seznam) seznam)
 
 
 
