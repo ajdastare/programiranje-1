@@ -21,7 +21,12 @@
  - : euro = Euro 0.4305
 [*----------------------------------------------------------------------------*)
 
+type euro = Euro of float
+type dollar = Dollar of float
 
+let dollar_to_euro dollar= 
+  match dollar with
+  | Dollar v -> Euro (0.2 *. v)
 
 (*----------------------------------------------------------------------------*]
  Definirajte tip [currency] kot en vsotni tip z konstruktorji za jen, funt
@@ -35,7 +40,16 @@
  - : currency = Pound 0.007
 [*----------------------------------------------------------------------------*)
 
+type currency =
+  | Yen of float
+  | Pound of float
+  | Krona of float
 
+let to_pound c =
+  match c with
+  | Yen v -> Pound (1. *. v)
+  | Pound v -> Pound v
+  | Krona v -> Pound 0.
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Želimo uporabljati sezname, ki hranijo tako cela števila kot tudi logične
@@ -57,6 +71,12 @@
  Nato napišite testni primer, ki bi predstavljal "[5; true; false; 7]".
 [*----------------------------------------------------------------------------*)
 
+type intbool_list =
+  | Empty
+  | Integer of int * intbool_list
+  | Bool of bool * intbool_list
+
+let primer = Integer(5, Bool(false, Integer(7, Empty)))
 
 
 (*----------------------------------------------------------------------------*]
@@ -65,14 +85,31 @@
  oz. [f_bool].
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_map = ()
+let rec map f = function
+  | [] -> []
+  | x :: xs -> (f x) :: map f xs
+
+let rec intbool_map f_int f_bool = function
+  (*| x :: xs if (x = bool) then (f_bool x) :: intbool_map xs else (f_int x) :: intbool_map xs*)
+  | Empty -> Empty
+  | Integer (i, xs) -> Integer(f_int i, intbool_map f_int f_bool xs)
+  | Bool (b, xs) -> Bool(f_bool b, intbool_map f_int f_bool xs)
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_reverse] obrne vrstni red elementov [intbool_list] seznama.
  Funkcija je repno rekurzivna.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_reverse = ()
+let rec intbool_reverse seznam =
+  let rec intbool_reverse' (acc : intbool_list) seznam =
+    match seznam with
+    | Empty -> acc
+    | Integer (i, xs) -> 
+       let new_acc = Integer(i, acc) in intbool_reverse' new_acc xs
+    | Bool (b, xs) -> 
+       let new_acc = Bool(b, acc) in intbool_reverse' new_acc xs
+  in intbool_reverse' Empty seznam
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_separate ib_list] loči vrednosti [ib_list] v par [list]
