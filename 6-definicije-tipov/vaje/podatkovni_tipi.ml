@@ -24,7 +24,7 @@
 type euro = Euro of float
 type dollar = Dollar of float
 
-let dollar_to_euro dollar= 
+let dollar_to_euro dollar = 
   match dollar with
   | Dollar v -> Euro (0.2 *. v)
 
@@ -70,6 +70,15 @@ let to_pound c =
 
  Nato napišite testni primer, ki bi predstavljal "[5; true; false; 7]".
 [*----------------------------------------------------------------------------*)
+
+(* type intbool_list = 
+  |Empty
+  |Integer of int * intbool_list
+  |Bool of bool* intbool_list
+
+let primer = Integer(5,Bool(True, Bool(False, Integer(7, Empty))))=
+ *)
+
 
 type intbool_list =
   | Empty
@@ -117,7 +126,14 @@ let rec intbool_reverse seznam =
  vrednosti. Funkcija je repno rekurzivna in ohranja vrstni red elementov.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_separate = ()
+let rec intbool_separate ib_list = 
+  let rec intbool_s' (acc_i : int list ) (acc_b : bool list) seznam =
+    match seznam with
+    |Empty -> (acc_i, acc_b)
+    |Integer (i, xs) ->  intbool_s' (acc_i @ [i]) acc_b xs
+    |Bool (b , xs) -> intbool_s' acc_i (acc_b @ [b]) xs
+  in intbool_s' [] [] ib_list
+
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Določeni ste bili za vzdrževalca baze podatkov za svetovno priznano čarodejsko

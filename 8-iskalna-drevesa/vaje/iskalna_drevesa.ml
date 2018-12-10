@@ -6,6 +6,9 @@
  poddrevesi. Na tej točki ne predpostavljamo ničesar drugega o obliki dreves.
 [*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*)
 
+type 'a tree =
+     | Empty
+     | Node of 'a tree * 'a * 'a tree
 
 (*----------------------------------------------------------------------------*]
  Definirajmo si testni primer za preizkušanje funkcij v nadaljevanju. Testni
@@ -17,7 +20,12 @@
        /   / \
       0   6   11
 [*----------------------------------------------------------------------------*)
+let leaf x = Node(Empty, x, Empty) 
 
+let test_tree = 
+  let left_t = Node(leaf 0,2, Empty) in 
+  let right_t = Node(leaf 6,7, leaf 11) in 
+  Node(left_t,5,right_t)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [mirror] vrne prezrcaljeno drevo. Na primeru [test_tree] torej vrne
@@ -33,7 +41,10 @@
  Node (Empty, 2, Node (Empty, 0, Empty)))
 [*----------------------------------------------------------------------------*)
 
-
+let rec mirror tree = 
+     match tree with 
+     |Empty -> Empty
+     |Node(lt,x,rt) -> Node(mirror rt, x, mirror lt)
 (*----------------------------------------------------------------------------*]
  Funkcija [height] vrne višino oz. globino drevesa, funkcija [size] pa število
  vseh vozlišč drevesa.
@@ -43,6 +54,34 @@
  # size test_tree;;
  - : int = 6
 [*----------------------------------------------------------------------------*)
+let rec height = function
+|Empty -> 0
+|Node(lt,x,rt) -> 1 + max (height lt) (height rt)
+
+let rec size tree = 
+     let rec size' acc queue = 
+     (* poglejmo kateri je naslednji element v vrsti za obravnavo *)
+     match queue with 
+     |[]-> acc
+     |t :: ts -> (
+          (* Obravnavamo drevo *)
+          match t with 
+          |Empty -> size' acc ts 
+          (* Prazno drevo samo odstranimo iz vrste *)
+          |Node(lt,x,rt) ->
+          let new_acc = acc + 1 in 
+          (* obravnavamo vozlišče *)
+          let new_queue = lt :: rt  :: ts in 
+          (* dodamo poddrevesa v vrsto *)
+          size' new_acc new_queue
+     )
+          
+     in 
+     size' 0 [tree]
+(* Podamo seznam dreves sicer si pa drevo zapomne kot število, kazalec *)
+          
+     
+
 
 
 (*----------------------------------------------------------------------------*]
@@ -54,6 +93,23 @@
  Node (Node (Node (Empty, false, Empty), false, Empty), true,
  Node (Node (Empty, true, Empty), true, Node (Empty, true, Empty)))
 [*----------------------------------------------------------------------------*)
+(* let rec map_tree f tree =
+     match [tree] with 
+     | [] -> []
+     | t :: ts -> f t :: map_tree f ts *)
+
+
+
+     (* let rec map' f drevo acc =
+          match drevo with
+          |[] -> acc
+          | t :: ts -> match t with
+          | Empty -> acc
+          | Node(lt,x,rt) -> map' f ts [Node(f lt, f x, f rt)] @ acc
+
+     in map' f [tree] [] *)
+
+
 
 
 (*----------------------------------------------------------------------------*]
@@ -63,7 +119,12 @@
  # list_of_tree test_tree;;
  - : int list = [0; 2; 5; 6; 7; 11]
 [*----------------------------------------------------------------------------*)
-
+let rec list_of_tree tree = 
+     let rec list acc tree =
+          match tree with 
+          | Node(lf,x,rt) -> list x :: acc lf  
+          |Node(lf,x,rt) -> list rt :: acc rt
+     in list [] tree
 
 (*----------------------------------------------------------------------------*]
  Funkcija [is_bst] preveri ali je drevo binarno iskalno drevo (Binary Search 
