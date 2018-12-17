@@ -8,7 +8,12 @@
  # let l = randlist 10 10 ;;
  val l : int list = [0; 1; 0; 4; 0; 9; 1; 2; 5; 4]
 [*----------------------------------------------------------------------------*)
-
+let rec randlist len max =
+  match len with 
+  |0 -> []
+  |1 -> [Random.int max]
+  |_ -> Random.int max :: randlist (len-1) max
+   
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  We can now use [randlist] to test our sorting functions (named [our_sort] in
@@ -18,7 +23,9 @@
  let test = (randlist 100 100) in (our_sort test = List.sort compare test);;
 [*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*)
 
-
+(* let test_sort_fun our_sort =
+  let test = (randlist 100  100) in
+    (our_sort test = list.sort compare test ) *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
  Insert Sort
 [*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
@@ -35,12 +42,30 @@
  - : int list = [7]
 [*----------------------------------------------------------------------------*)
 
+let rec insert y = function
+	|[] -> [y]
+	|(x::xs) as xs_old -> if x>y then [y]@xs_old else
+	x::(insert y xs)
+		
+
+  (* let rec insert y xs = 
+  let rec insert' y xs acc=
+    match y xs with
+    |_, [] -> y :: acc
+    |_, x :: s for (y > x) ->  x :: insert ' y s
+    |_, x :: s for (y < = x) -> insert' y [] (y @ (x :: s))
+ *)
 
 (*----------------------------------------------------------------------------*]
  The empty list is sorted. The function [insertion_sort] sorts a list by
  consecutively inserting all of its elements into the empty list.
 [*----------------------------------------------------------------------------*)
-
+let rec insertion_sort l =
+  let rec insert' l acc = 
+    match l with 
+    |[] -> acc
+    |x :: xs -> let new_acc = (insert x acc) in insert' xs new_acc
+  in insert' l []
 
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
@@ -52,6 +77,18 @@
  is the smallest element in [list] and [list'] is equal to [list] with the
  first occurance of [z] removed. If the list is empty it returns [None].
 [*----------------------------------------------------------------------------*)
+let rec remove x list = 
+  match x, list with
+  | _, [] -> []
+  | x, t :: ys when (x = t) -> remove x ys
+  | x, t :: ts -> t :: remove x ts
+
+let min_and_rest l = 
+  let new_l = insertion_sort l in
+   match new_l with
+   | [] -> None
+   | x :: xs -> Some (x,(remove x l))
+
 
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
@@ -71,7 +108,12 @@
  The function [selection_sort] implements the above algorithm.
  Hint: Use [min_and_rest] from the previous exercise.
 [*----------------------------------------------------------------------------*)
+let rec selection_sort l = 
+  let rec selection' rezultat acc= 
+    match rezultat with 
+    | Some (x, xs ) -> x :: acc 
 
+    in selection' (min_rest l) []
 
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
