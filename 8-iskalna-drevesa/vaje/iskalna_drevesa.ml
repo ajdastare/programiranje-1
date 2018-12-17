@@ -26,7 +26,7 @@ let test_tree =
   let left_t = Node(leaf 0,2, Empty) in 
   let right_t = Node(leaf 6,7, leaf 11) in 
   Node(left_t,5,right_t)
-
+  
 (*----------------------------------------------------------------------------*]
  Funkcija [mirror] vrne prezrcaljeno drevo. Na primeru [test_tree] torej vrne
           5
@@ -109,7 +109,11 @@ let rec size tree =
 
      in map' f [tree] [] *)
 
-
+let rec map_tree f tree = 
+     match tree with 
+     |Empty -> Empty
+     |Node(lt,x,rt) -> Node(map_tree f lt , f x, map_tree f rt)
+     
 
 
 (*----------------------------------------------------------------------------*]
@@ -120,12 +124,19 @@ let rec size tree =
  - : int list = [0; 2; 5; 6; 7; 11]
 [*----------------------------------------------------------------------------*)
 let rec list_of_tree tree = 
-     let rec list acc tree =
+     let rec list' acc tree =
           match tree with 
-          | Node(lf,x,rt) -> list x :: acc lf  
-          |Node(lf,x,rt) -> list rt :: acc rt
-     in list [] tree
+          |Empty -> acc
+          | Node(lf,x,rt) -> list' (x :: acc) lf @ list' [] rt
 
+     in list' [] tree
+
+(* let rec list_of_tree tree=
+    let rec list' acc tree =
+        match tree with
+        | Empty -> acc
+        | Node(levi, x, desni) -> list' (x :: acc) levi @ list' [] desni
+    in list' [] tree *)
 (*----------------------------------------------------------------------------*]
  Funkcija [is_bst] preveri ali je drevo binarno iskalno drevo (Binary Search 
  Tree, na kratko BST). Predpostavite, da v drevesu ni ponovitev elementov, 
@@ -173,6 +184,15 @@ let rec list_of_tree tree =
  # pred (Node(Empty, 5, leaf 7));;
  - : int option = None
 [*----------------------------------------------------------------------------*)
+(* let succ bst = 
+     let rec min = function
+     |Empty -> None
+     |Node(x,Empty,_)-> Some x
+     |Node(_,l,_)-> min l 
+     in 
+     match bst with
+     |Empty  -> None
+     |Node (_,_,r) -> min r *)
 
 
 (*----------------------------------------------------------------------------*]
@@ -187,7 +207,18 @@ let rec list_of_tree tree =
  Node (Node (Node (Empty, 0, Empty), 2, Empty), 5,
  Node (Node (Empty, 6, Empty), 11, Empty))
 [*----------------------------------------------------------------------------*)
-
+(* let rec delete x = function
+|Empty -> Empty
+|(Node (y,l,r ) as t ) -> 
+     if x < y then 
+     Node (y, delete x l , r)
+     else if x > y then
+     Node(y, l , delete x r)
+     else
+     match succ t with
+     |None -> l
+     |Some -> 
+     else (x  = y ) *)
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  SLOVARJI
@@ -209,8 +240,17 @@ let rec list_of_tree tree =
          /
      "c":-2
 [*----------------------------------------------------------------------------*)
+type ('key, 'value) dict = ('key * 'value) tree
 
 
+
+  let test_dict = 
+     let levo_d = Node(Empty,("a",0), Empty ) in
+     let desno_d = Node(leaf ("c",-2),("d",2), Empty) in
+     Node(levo_d,("b",1),desno_d)
+    
+
+     
 (*----------------------------------------------------------------------------*]
  Funkcija [dict_get key dict] v slovarju poišče vrednost z ključem [key]. Ker
  slovar vrednosti morda ne vsebuje, vrne [option] tip.
@@ -220,8 +260,10 @@ let rec list_of_tree tree =
  # dict_get "c" test_dict;;
  - : int option = Some (-2)
 [*----------------------------------------------------------------------------*)
-
-      
+(* let rec get_dict k = function
+|Empty -> None
+| Node (('k,v))
+       *)
 (*----------------------------------------------------------------------------*]
  Funkcija [print_dict] sprejme slovar s ključi tipa [string] in vrednostmi tipa
  [int] in v pravilnem vrstnem redu izpiše vrstice "ključ : vrednost" za vsa
