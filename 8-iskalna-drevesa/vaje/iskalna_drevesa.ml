@@ -147,6 +147,22 @@ let rec list_of_tree tree =
  # test_tree |> mirror |> is_bst;;
  - : bool = false
 [*----------------------------------------------------------------------------*)
+let rec urejen seznam = 
+     match seznam with 
+     | [] ->true
+     | x :: [] -> true
+     | x :: xs :: xy -> 
+     if x <= xs then 
+     urejen (xs :: xy)
+      else
+      false
+     | x :: xs :: [] -> if x <= xs then 
+          true
+     else 
+          false
+
+let rec is_bst tree = urejen (list_of_tree tree) 
+
 
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
@@ -162,6 +178,40 @@ let rec list_of_tree tree =
  # member 3 test_tree;;
  - : bool = false
 [*----------------------------------------------------------------------------*)
+(* let rec insert element drevo = 
+     match drevo with 
+     |Empty -> Node(Empty,element,Empty)
+     |Node(levi,x,desni) -> if element > x 
+          let novi_desni = insert element desni in
+          Node(levi, x, novi_desni)
+     else
+     let novi_levi = insert element levi in 
+     Node(novi_levi, x, desni)
+     
+     *)
+     let rec insert element tree=
+          match tree with
+          | Empty -> Node(Empty, element, Empty)
+          | Node(levi, x, desni) ->
+              if element < x then
+                  let novi_levi = insert element levi in
+                  Node(novi_levi, x, desni)
+              else
+                  let novi_desni = insert element desni in
+                  Node(levi, x, novi_desni)
+
+
+     let rec member element drevo = 
+          match drevo with 
+          |Empty -> false
+          |Node(levi, x, desni) -> 
+          if x = element then
+               true
+          else 
+          if element < x then
+               member element levi
+          else 
+                member element desni
 
 
 (*----------------------------------------------------------------------------*]
@@ -193,8 +243,27 @@ let rec list_of_tree tree =
      match bst with
      |Empty  -> None
      |Node (_,_,r) -> min r *)
+(* najprej sestavi funkcijo za iskanje minimuma v drevesu lahko si poamgaš s tem da je drevo BST al pa da ga daš v seznnam *)
 
+let rec minimum drevo = 
+     match drevo with
+     | Empty -> failwith "Prazno"
+     | Node(levo,x, desno) -> minimum levo
+     | Node(Empty,x,desno) -> Some x
 
+let rec minimum2 tree=
+     let rec minimum' tree=
+           match tree with
+          | [] -> failwith "Prazno drevo"
+          | x :: [] -> x
+          | x :: xs -> min x (minimum' xs)
+     in minimum' (list_of_tree tree)
+
+let rec succ tree =
+     match tree with 
+     | Empty -> failwith "prazno"
+     | Node(levi, x, desni) -> minimum2 desni
+     | Node (Empty, x, desni ) -> failwith "Ni večjega elementa"
 (*----------------------------------------------------------------------------*]
  Na predavanjih ste omenili dva načina brisanja elementov iz drevesa. Prvi 
  uporablja [succ], drugi pa [pred]. Funkcija [delete x bst] iz drevesa [bst] 
