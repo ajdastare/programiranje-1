@@ -30,35 +30,18 @@
 def pivot(a,start,end): 
     pivot = a[start]
     index_pivota = start
-    for i in range(start,end + 1):
-        for j in range((start+1), (end + 1)):
-            if a[j] < a[i]:
-                a[i], a[j] = a[j], a[i]
-                index_pivota = j
-                j = 1 + j
-    return index_pivota
-
-
-def swap(my_list,i,j): 
-
-    my_list[i], my_list[j] = my_list[j], my_list[i]
-
-    return my_list
-
-
-def pivot_(a,start,end):
-    index = start
-    pivot = a[index]
-    for i in range(index + 1 , end + 1): 
-        for j in range(index + 1, end + 1):
-            if a[i] < pivot: 
-                a[i],a[index]= a[index],a[i]
-                index = index + 1
-            else:
-                i = 1 + i
-    return
-                
-
+    i = start
+    if start >=end : 
+        pass
+    for i in range(start, end + 1):
+        for j in range (i+1, end + 1):
+            if a[i] >= pivot:
+                if a[j] <= pivot :
+                    a[i], a[j] = a[j], a[i]
+                    
+    
+    
+    return a.index(pivot)
 
 
 
@@ -75,7 +58,17 @@ def pivot_(a,start,end):
 #   >>> quicksort(a)
 #   [2, 3, 4, 5, 10, 11, 15, 17, 18]
 ##############################################################################
+def quicksort_part(a,start,end):
+    if start >= end : 
+        pass
+    else :
+        index = pivot(a,start,end)
+        quicksort_part(a,start,index)
+        quicksort_part(a, index + 1, end)
 
+def quicksort(a):
+    quicksort_part(a,0 , len(a)-1)
+    return a
 
  
 ##############################################################################
@@ -92,5 +85,10 @@ def pivot_(a,start,end):
 # element po velikosti. Funkcija sme spremeniti tabelo [a]. Cilj naloge je, da
 # jo resite brez da v celoti uredite tabelo [a].
 ##############################################################################
-def kth_element(a, k): 
-    for i in range (0, len(a)+ 1): 
+# # def kth_element(a, k): 
+# #     for i in range (0, len(a)+ 1): 
+
+    
+                
+                # pivot(a,start,end) postavi pivot
+                # quick sort levi in desni del

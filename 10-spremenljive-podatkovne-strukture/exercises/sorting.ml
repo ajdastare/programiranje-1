@@ -61,12 +61,18 @@ let rec insert y = function
  consecutively inserting all of its elements into the empty list.
 [*----------------------------------------------------------------------------*)
 let rec insertion_sort l =
-  let rec insert' l acc = 
-    match l with 
+  let rec insert' seznam acc = 
+    match seznam with 
     |[] -> acc
-    |x :: xs -> let new_acc = (insert x acc) in insert' xs new_acc
-  in insert' l []
+    |x :: [] -> insert x acc
+    |x :: y :: ys ->
+      if acc = [] then 
+        insert' [x] (y :: ys)
+      else
+        insert x acc
+      in insert' l [] 
 
+     
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
  Selection Sort
@@ -108,12 +114,27 @@ let min_and_rest l =
  The function [selection_sort] implements the above algorithm.
  Hint: Use [min_and_rest] from the previous exercise.
 [*----------------------------------------------------------------------------*)
-let rec selection_sort l = 
-  let rec selection' rezultat acc= 
-    match rezultat with 
-    | Some (x, xs ) -> x :: acc 
 
-    in selection' (min_rest l) []
+let rec reverse seznam =
+  let rec aux acc seznam =
+    match seznam with
+    | [] -> acc
+    | x :: xs -> aux (x :: acc) xs
+  in aux [] seznam
+
+
+let rec selection_sort seznam = 
+  let rec selection_sort' seznam acc = 
+    match (min_and_rest seznam) with
+    |Some(x,s) -> selection_sort' s (x :: acc)
+    |None -> acc
+  in selection_sort' seznam []
+
+
+
+  
+  
+  
 
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
@@ -142,8 +163,11 @@ let rec selection_sort l =
  # test;;
  - : int array = [|0; 4; 2; 3; 1|]
 [*----------------------------------------------------------------------------*)
-
-
+let swap a i j = 
+  let z = a.(i) in
+    a.(i) <- a.(j);
+    a.(j)<- z
+    
 (*----------------------------------------------------------------------------*]
  The function [index_min a lower upper] computes the index of the smallest
  element in [a] between indices [lower] and [upper] (both included).
@@ -151,6 +175,10 @@ let rec selection_sort l =
  index_min [|0; 2; 9; 3; 6|] 2 4 = 4
 [*----------------------------------------------------------------------------*)
 
+  let index_min a lower upper = 
+    let l = a.(lower) in
+    let u = a.(upper) in
+    if l <= u then lower else upper
 
 (*----------------------------------------------------------------------------*]
  The function [selection_sort_array] implements in-place selection sort.

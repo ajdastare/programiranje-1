@@ -333,6 +333,18 @@ type ('key, 'value) dict = ('key * 'value) tree
 |Empty -> None
 | Node (('k,v))
        *)
+
+let rec get_dict key dict = 
+     match dict with
+     |Empty -> None
+     |Node(l, (k,v), d) -> 
+     if k = key then Some(v)
+     else if k > key then
+          get_dict key l
+     else 
+          get_dict key d
+
+      
 (*----------------------------------------------------------------------------*]
  Funkcija [print_dict] sprejme slovar s ključi tipa [string] in vrednostmi tipa
  [int] in v pravilnem vrstnem redu izpiše vrstice "ključ : vrednost" za vsa
@@ -348,8 +360,13 @@ type ('key, 'value) dict = ('key * 'value) tree
  d : 2
  - : unit = ()
 [*----------------------------------------------------------------------------*)
+(* let rec print_string string =
+     match string with
+     |"_" -> print(_) *)
 
-
+let rec print_dict = function
+     |Empty -> ()
+     |Node(levi, (k,v), desni) -> (print_dict levi);(print_string(k));(print_string(":"));(print_int(v));(print_string("\n"));(print_dict desni)
 (*----------------------------------------------------------------------------*]
  Funkcija [dict_insert key value dict] v slovar [dict] pod ključ [key] vstavi
  vrednost [value]. Če za nek ključ vrednost že obstaja, jo zamenja.
@@ -368,4 +385,4 @@ type ('key, 'value) dict = ('key * 'value) tree
  d : 2
  - : unit = ()
 [*----------------------------------------------------------------------------*)
-
+let dict_insert key value dict =
