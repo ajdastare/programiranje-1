@@ -212,7 +212,9 @@ let max l =
   |h::t ->  let rec helper (seen,rest) =
               match rest with 
               [] -> seen
-              |h'::t' -> let seen' = if h' > seen then h' else seen in 
+              |h'::t' -> let seen' = if h' > seen then h' 
+                        else seen in 
+
                          let rest' = t'
               in helper (seen',rest')
             in helper (h,t) 

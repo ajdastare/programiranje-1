@@ -150,7 +150,15 @@ let rec intbool_separate ib_list =
  raziskovanje oz. historian, teacher in researcher. Definirajte tip
  [specialisation], ki loči med temi zaposlitvami.
 [*----------------------------------------------------------------------------*)
+type magic = 
+  |Fire
+  |Frost
+  |Arcane
 
+type specialisation =
+  |Historian
+  |Teacher
+  |Researcher
 
 
 (*----------------------------------------------------------------------------*]
@@ -167,7 +175,12 @@ let rec intbool_separate ib_list =
  # professor;;
  - : wizard = {name = "Matija"; status = Employed (Fire, Teacher)}
 [*----------------------------------------------------------------------------*)
+type status = 
+  |Newbie
+  |Student of magic * int
+  |Employed of magic * specialisation
 
+type wizzard = {name : string ; status: status }
 
 
 (*----------------------------------------------------------------------------*]
@@ -181,8 +194,12 @@ let rec intbool_separate ib_list =
  - : magic_counter = {fire = 1; frost = 1; arcane = 2}
 [*----------------------------------------------------------------------------*)
 
+type magic_counter = {fire: int; frost: int; arcane: int}
 
-
+let update counter = function
+       | Fire -> {counter with fire = counter.fire + 1}
+       | Frost -> {counter with frost = counter.frost + 1}
+       | Arcane -> {counter with arcane = counter.arcane + 1}
 (*----------------------------------------------------------------------------*]
  Funkcija [count_magic] sprejme seznam čarodejev in vrne števec uporabnikov
  različnih vrst magij.
@@ -190,8 +207,30 @@ let rec intbool_separate ib_list =
  # count_magic [professor; professor; professor];;
  - : magic_counter = {fire = 3; frost = 0; arcane = 0}
 [*----------------------------------------------------------------------------*)
+(* Čarovnik je podan z name, status  *)
 
-let rec count_magic = ()
+let count_magic2 seznam_carovnikov =
+  let rec count' counter = function
+  |[]-> counter
+  |{name ; status} :: xs -> (
+    match status with
+    |Newbie ->count' counter xs
+    |Student (magic,_) -> count' (update counter magic) xs
+    |Employed (magic,_) -> count' (update counter magic) xs
+  )
+  in count' {fire = 0; frost = 0; arcane = 0} seznam_carovnikov
+
+
+
+let count_magic wizard_list =
+  let rec count_magic' counter = function
+    | [] -> counter
+    | {name; status} :: wizards -> (
+        match status with
+        | Newbie -> count_magic' counter wizards
+        | Student (magic, _) -> count_magic' (update counter magic) wizards
+        | Employed (magic, _) -> count_magic' (update counter magic) wizards)
+  in count_magic' {fire = 0; frost = 0; arcane = 0} wizard_list
 
 (*----------------------------------------------------------------------------*]
  Želimo poiskati primernega kandidata za delovni razpis. Študent lahko postane
@@ -206,5 +245,45 @@ let rec count_magic = ()
  # find_candidate Frost Researcher [professor; jaina];;
  - : string option = Some "Jaina"
 [*----------------------------------------------------------------------------*)
+(* (če študira vrsto magic, in zahteva specialisation ustreza) *)
+(* Student (magic,int),
+specialization = historian -> int more bit vsaj 3
+researcher -> int vsaj 4
+teacher -> int vsaj 5 *)
+let find_candidate magic specialisation wizard_list =
+  let year =
+    match specialisation with
+    | Historian -> 3
+    | Researcher -> 4
+    | Teacher -> 5
+  in
+  let rec search = function
+    | [] -> None
+    | {name; status} :: wizards ->
+        match status with
+        | Student (m, y) when m = magic && y >= year -> Some name
+        | _ -> search wizards
+  in
+  search wizard_list
 
-let rec find_candidate = ()
+
+
+
+
+let rec find_candidate2 magic specialisation wizzard_list = 
+  match wizzard_list with 
+  | {name; status} :: the_rest -> 
+    match status with
+    |Student (m, i) when specialisation = Historian && i >= 3 && m = magic->  
+        Some name
+    |Student (m,i) when specialisation = Teacher && i >= 4 && m = magic ->
+     Some name
+    |Student (m,i) when specialisation = Researcher && i >= 5 && m = magic -> 
+    Some name
+    |_ -> find_candidate magic specialisation the_rest
+    
+
+
+
+
+
