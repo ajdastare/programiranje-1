@@ -155,7 +155,7 @@ let rec urejen seznam =
      if x <= xs then 
      urejen (xs :: xy)
       else
-      false
+          false
      | x :: xs :: [] -> if x <= xs then 
           true
      else 
@@ -288,6 +288,23 @@ let rec succ tree =
      |None -> l
      |Some -> 
      else (x  = y ) *)
+let rec delete x tree =
+      match tree with
+     | Empty -> Empty (*Empty case*)
+     | Node(Empty, y, Empty) when x = y -> Empty (*Leaf case*)
+     | Node(Empty, y, rt) when x = y -> rt (*One sided*)
+     | Node(lt, y, Empty) when x = y -> lt (*One sided*)
+     | Node(lt, y, rt) when x <> y -> (*Recurse deeper*)
+          if  y < x then
+               Node(lt, y, delete x rt)
+          else 
+               Node(delete x lt, y, rt)
+     (* | Node(lt, y, rt) -> (*SUPER FUN CASE*)
+               match succ tree with
+               | None -> failwith "How is this possible?!" (*this cannot happen :D*) (*Case ki bi ga dobil smo že pokril*)
+               | Some z -> Node(lt, z, delete z rt)
+        *)
+
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  SLOVARJI
@@ -385,4 +402,9 @@ let rec print_dict = function
  d : 2
  - : unit = ()
 [*----------------------------------------------------------------------------*)
-let dict_insert key value dict =
+let rec dict_insert key value dict = 
+     match dict with
+     |Empty -> Empty
+     |Node(lt,(k,v), rt) when k = key -> Node(lt,(k,value),rt)
+     |Node(lt,(k,v),rt) when k < key -> Node(lt,(k,v),dict_insert key value rt)
+     |Node(lt,(k,v),rt) when k > key -> Node(dict_insert key value rt, (k,v), rt)

@@ -8,7 +8,12 @@
  # let l = randlist 10 10 ;;
  val l : int list = [0; 1; 0; 4; 0; 9; 1; 2; 5; 4]
 [*----------------------------------------------------------------------------*)
-
+let rec randlist len max = 
+  match len with
+  |0 -> []
+  |1 -> [Random.int max]
+  |_ -> Random.int max :: randlist (len-1) max
+  
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Sedaj lahko s pomočjo [randlist] primerjamo našo urejevalno funkcijo (imenovana
@@ -35,7 +40,11 @@
  - : int list = [7]
 [*----------------------------------------------------------------------------*)
 
-
+let rec insert y xs = 
+  match xs with
+  |[] -> [y]
+  | x :: xs when y > x -> x :: insert y xs
+  | x :: xs when x> y -> [y] @ (x :: xs)
 (*----------------------------------------------------------------------------*]
  Prazen seznam je že urejen. Funkcija [insert_sort] uredi seznam tako da
  zaporedoma vstavlja vse elemente seznama v prazen seznam.

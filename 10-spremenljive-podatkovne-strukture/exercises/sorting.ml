@@ -72,7 +72,15 @@ let rec insertion_sort l =
         insert x acc
       in insert' l [] 
 
-     
+let rec insertion_sort2 l = 
+  let rec insert' seznam acc = 
+    match seznam with
+    |[]-> acc
+    |x :: [] -> insert x acc
+    |x :: xs :: ys -> insert' (xs :: ys) (insert x acc)
+  in insert' l []
+  
+
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
  Selection Sort

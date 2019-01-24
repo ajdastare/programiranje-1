@@ -72,10 +72,19 @@ Filter ((fun x -> x < 10),[]
 Ostalo []))
 
 (* b *)
+let vstavi x veriga = 
+  match veriga with:
+  |Filter(f,xs, ostalo) -> if f x then xs 
+    else 
+      vstavi x ostalo 
+
+
+
 (* let vstavi x veriga =
   match veriga with
   |Ostalo (element)
   | *)
+
 
 
   
@@ -85,6 +94,8 @@ let rec poisci x = function
        if f x then List.mem x elementi else poisci x filtri
       
 
+
+       
 let rec izprazni = function 
   |Ostalo elementi -> (Ostalo [], elementi),
   |Filter (f , elementi, filtri) ->
